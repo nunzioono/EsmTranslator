@@ -4,7 +4,7 @@
 
 ESM translator è un programma per uso privato. Le funzionalità che offre sono quelle, dato in input un file esm di:
 
-- processarne il testo creando un file mapping ed uno preprocessed (.csv comma separated values) al fine di estrarre stringhe da tradurre (dialoghi, titoli missioni e molto altro)
+- processarne il testo tramite la libreria python `bethesda-struct`
 
 - inviare le stringhe ad un traduttore basato su intelligenza artificiale e tradurre
 
@@ -15,6 +15,10 @@ Il programma riceve in input il path del file esm e restituisce in output un fil
 ##Limitazioni
 
 AI translator permette la traduzione gratuita fino a 500.000 caratteri al mese. Al fine di rendere l'utilizzo del traduttore gratuito ESM translator misura il numero di caratteri tradotti ogni mese e una volta raggiunto il limite blocca le funzionalità fino al mese successivo
+
+####Bethesda-struct
+
+Documentazione al [link](https://pypi.org/project/bethesda-structs/)
 
 ####Dettagli Google Cloud Translation
 

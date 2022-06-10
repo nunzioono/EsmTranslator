@@ -5,14 +5,9 @@ class Extractor:
 
     def __init__(self, plugin_path):
         self.plugin= FNVPlugin.parse_file(plugin_path)
-        f=open("../data/tipi-stringhe.txt", "r")
-        text=f.readlines()
-        text=str(text)
-        self.lines=text.split("\n")
-        f.close()
 
     def extract(self):
-        fdatradurre=open("../data/stringhe-da-tradurre.txt","w")
+        fdatradurre=open("../data/strings.csv","w")
 
         for record in self.plugin.iter_records():
             for subrecord in record.subrecords:
@@ -26,7 +21,7 @@ class Extractor:
                         break
 
                 if righttype:
-                    fdatradurre.write(str(record.type)+"->"+str(subrecord.type)+":"+str(subrecord.data))
+                    fdatradurre.write(str(record.type)+"->"+str(subrecord.type)+","+str(subrecord.data)+"\n")
 
 
         fdatradurre.close()
