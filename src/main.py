@@ -1,83 +1,92 @@
 from sys import argv
-from bethesda_structs.plugin import FNVPlugin
+from bethesda_structs.plugin import FNVPlugin 
 import re
-import time
+import concurrent.futures
+from bs4 import BeautifulSoup
 
 class Extractor:
 
     def __init__(self, plugin_path):
         self.plugin_path=plugin_path
-        self.plugin= FNVPlugin.parse_file(plugin_path)
+        self.plugin=FNVPlugin.parse_file(self.plugin_path)
+        self.plugin= self.plugin.parse_file(plugin_path)
         self.recordsallowedtypes=["FACT","WYWD","RACE","MGEF","ENCH","SPEL","ACTI","TACT","ARMO","BOOK","CONT","DOOR","LIGH","MISC","STAT","MSTT","FLOR","FURN","WEAP","AMMO","NPC_","KEYM","ALCH","NOTE","PROJ","TERM","CELL","WRLD","REFR","QUST","INFO","WATR","FLST","PERK","LCTN","MESG","OMOD","INNR","ARMO","BOOK","ALCH","COBJ","INFO"]
-        self.subrecordsallowedtypes=["FULL","FMRN","DNAM","ATTX","ONAM","SHRT","UNAM","BTXT","ITXT","NAM0","WNAM","RNAM","NNAM","DESC","NAM1"]
+        self.subrecordsallowedtypes=["FULL","FMRN","ATTX","ONAM","SHRT","UNAM","BTXT","ITXT","WNAM","NNAM","DESC"]
+        self.StringTranslationMap={}
+        self.createMap()
+        self.populateMap()
+        self.pruneMap()
+
 
     def getProgressPercentage(self, iteratorindex, recordlenght):
         rawpercentage= (iteratorindex/recordlenght)*100
-        percentage=round(rawpercentage,2)
+        percentage=round(rawpercentage,1)
         return percentage
 
-    def joinToString(self, list):
-        stringtoreturn="["
-        for item in list:
-            stringtoreturn+=item+","
-        
-        stringtoreturn=stringtoreturn[:-1]
-        stringtoreturn+="]"
-        return stringtoreturn
+    def createMap(self):
+        f=open("../data/stringhemappate.csv","w")
 
-    def findOccurrences(self, stringtofind):
-        f=open(self.plugin_path, "r", encoding="Latin-1")
-        text=f.read()
-        escaped=re.escape(stringtofind)
-        occurrences=[]
-
-        for match in re.finditer(escaped, text):
-            if match.group(0) != "":
-                occurrence=str((match.start(),match.end()))
-                occurrences.append(occurrence)
-
+        for record in self.plugin.iter_records():
+            type1=record.type
+            for subrecord in record.subrecords:
+                type2=subrecord.type
+                extract=subrecord.data.decode("Latin-1").strip("\x00")
+                word=str(extract)
+                if "<" in word:
+                    #TODO fix for tag rewriting after translation
+                    word=BeautifulSoup(word,"html.parser").get_text()
+                if word != "" and not re.match("[^\x00-\x7F]+",word) and not hasattr(self.StringTranslationMap, word) and type1 in self.recordsallowedtypes and type2 in self.subrecordsallowedtypes:
+                    self.StringTranslationMap[word]={}
+                    self.StringTranslationMap[word]["type1"]=type1
+                    self.StringTranslationMap[word]["type2"]=type2
+                    self.StringTranslationMap[word]["string"]=word
+                    self.StringTranslationMap[word]["translation"]=""
+                    self.StringTranslationMap[word]["size_string"]=subrecord.data_size
+                    self.StringTranslationMap[word]["size_translation"]=-1
+                    self.StringTranslationMap[word]["occurrencies"]=[]
+                    self.StringTranslationMap[word]["num_occurrencies"]=0
+                    f.write(str(self.StringTranslationMap[word])+"\n")
         f.close()
-        return occurrences
 
-    def extract(self):
-        ftotranslate=open("../data/strings.csv","w")
-        dict={}
-        recordlenght=0
+    def populateMap(self):
 
-        for record in self.plugin.iter_records():
-            recordlenght+=record.data_size
+        #open the file read text
+        with open(self.plugin_path, "rb") as file:
+            text=file.read()
+            text=text.decode("Latin-1")
+        #check for each word if it is in the text
+        
+            for word in self.StringTranslationMap:
+        
+        #if it is add an occourrence
+                if word in text:
+                    escaped=re.escape(word)
+                    for match in re.finditer(escaped, text):
+                        if match.group(0) != "":
+                            occurrence=str((match.start(),match.end()))
+                            self.StringTranslationMap[word]["occurrencies"].append(occurrence)
+                            self.StringTranslationMap[word]["num_occurrencies"]=len(self.StringTranslationMap[word]["occurrencies"])
 
-        iteratorindex=0
-        progress=0
-        starttime=time.time()
+        #if not pass
+                else:
+                    pass
 
-        for record in self.plugin.iter_records():
+            file.close()
 
-            progress=self.getProgressPercentage(iteratorindex, recordlenght)
-            moment=time.time()
-            elapsedtime=moment-starttime
-            elapsedtime=round(elapsedtime,1)
-            if(elapsedtime%0.5==0):
-                print("Progress: "+str(progress)+"%")
+    def pruneMap(self):
+        orderedMap=sorted(self.StringTranslationMap, key=lambda k: self.StringTranslationMap[k]["size_string"], reverse=False)
 
-            for subrecord in record.iter_subrecords():
+    def todo(self, word):
+        actualprogress=self.getProgressPercentage(iteratorindex, "recordlenght")
+        if actualprogress != progress:
+            print("Progress: "+str(actualprogress)+"%")
+            progress=actualprogress
 
-                if record.type in self.recordsallowedtypes and subrecord.type in self.subrecordsallowedtypes:
-                    extract=subrecord.data.decode("Latin-1")
-                    word=str(extract)
-                    word=word.strip("\x00")
-                    if word != "" and dict[word] == None:
-                        occurrences=self.findOccurrences(word)
-                        occurencesstring=self.joinToString(occurrences)
-                        #TODO: translate the word
-                        translation=word
-                        dict[word]=[translation,record.type+"->"+subrecord.type,occurencesstring]
-
-            iteratorindex+=record.data_size
-
-        for key in dict:
-            ftotranslate.write(dict[key][0]+","+self.joinToString(dict[key][1])+"\n")
-        ftotranslate.close()
+        executor=concurrent.futures.ThreadPoolExecutor(max_workers=self.maxthreads)
+        # Start the load operations and mark each future with its URL
+        futuretodict = {executor.submit(self.extractRecord, dict, "record", subrecord):  subrecord for subrecord in "record".subrecords}
+        for future in concurrent.futures.as_completed(futuretodict):
+            iteratorindex+=futuretodict[future].data_size
 
 
-Extractor(argv[1]).extract()
+Extractor(argv[1])
