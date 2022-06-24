@@ -26,9 +26,7 @@ class Extractor:
 
     def createMap(self):
         f=open("../data/mapping.csv","w")
-        frewriting=open("../data/rewriting.csv","w")
         progressiveId=1
-
 
         for record in self.plugin.iter_records():
             type1=record.type
@@ -36,32 +34,22 @@ class Extractor:
                 type2=subrecord.type
                 extract=subrecord.data.decode("Latin-1").strip("\x00")
                 word=str(extract)
-                countminus=word.count("<")
-                if countminus!=0 and countminus%2==0 :
+                if "<" in word:
                     #TODO fix for tag rewriting after translation
-                    soup=BeautifulSoup(word,"html.parser")
-                    word=soup.get_text()
-                    #split the word using < as delimiter
-                    print(word)
-                    words=word.split("<")
-                    print("----------------------------------")
-                    print(words)
-                    for newword in words:
-                        if newword!="" and newword[0:1]!="/" and ">" in newword:
-                        #set finalword to the substring of word starting at the index of >
-                            finalword=word[word.index(">")+1:]
-                            record=StringTranslationRecord(progressiveId,type1,type2,finalword,len(finalword),"",0,[],0)
-                            progressiveId+=1
-                            f.write(str(self.StringTranslationMap[word])+"\n")
-
-                if word != "" and not re.match("[^\x00-\x7F]+",word) and not hasattr(self.StringTranslationMap, word) and type1 in self.recordsallowedtypes and type2 in self.subrecordsallowedtypes:
+                    word=BeautifulSoup(word,"html.parser").get_text()
+                if word != "" and not re.match("[^\x00-\x7F]+",word) and self.StringTranslationMap.get(word)==None:
                     record=StringTranslationRecord(progressiveId,type1,type2,word,len(word),"",0,[],0)
                     progressiveId+=1
-                    f.write(str(self.StringTranslationMap[word])+"\n")
+                    print(record.string==word)
+                    record=self.StringTranslationMap.get(record.string)
+                    if record != None:
+                        print(str(record))
+                        f.write(str(record)+"\n")
         f.close()
 
     def populateMap(self):
-
+        
+        print("populate")
         #open the file read text
         with open(self.plugin_path, "rb") as file:
             text=file.read()
@@ -102,4 +90,3 @@ class Extractor:
 
 
 Extractor(argv[1])
-
