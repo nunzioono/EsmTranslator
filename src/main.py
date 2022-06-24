@@ -24,7 +24,10 @@ class Extractor:
         return percentage
 
     def createMap(self):
-        f=open("../data/stringhemappate.csv","w")
+        f=open("../data/mapping.csv","w")
+        frewriting=open("../data/rewriting.csv","w")
+        progressiveId=1
+
 
         for record in self.plugin.iter_records():
             type1=record.type
@@ -32,11 +35,36 @@ class Extractor:
                 type2=subrecord.type
                 extract=subrecord.data.decode("Latin-1").strip("\x00")
                 word=str(extract)
-                if "<" in word:
+                countminus=word.count("<")
+                if countminus!=0 and countminus%2==0 :
                     #TODO fix for tag rewriting after translation
-                    word=BeautifulSoup(word,"html.parser").get_text()
+                    soup=BeautifulSoup(word,"html.parser")
+                    word=soup.get_text()
+                    #split the word using < as delimiter
+                    print(word)
+                    words=word.split("<")
+                    print("----------------------------------")
+                    print(words)
+                    for newword in words:
+                        if newword!="" and newword[0:1]!="/" and ">" in newword:
+                        #set finalword to the substring of word starting at the index of >
+                            finalword=word[word.index(">")+1:]
+                            self.StringTranslationMap[finalword]={}
+                            self.StringTranslationMap[finalword]["id"]=progressiveId
+                            self.StringTranslationMap[finalword]["type1"]=type1
+                            self.StringTranslationMap[finalword]["type2"]=type2
+                            self.StringTranslationMap[finalword]["string"]=word
+                            self.StringTranslationMap[finalword]["translation"]=""
+                            self.StringTranslationMap[finalword]["size_string"]=subrecord.data_size
+                            self.StringTranslationMap[finalword]["size_translation"]=-1
+                            self.StringTranslationMap[finalword]["occurrencies"]=[]
+                            self.StringTranslationMap[finalword]["num_occurrencies"]=0
+                            progressiveId+=1
+                            f.write(str(self.StringTranslationMap[word])+"\n")
+
                 if word != "" and not re.match("[^\x00-\x7F]+",word) and not hasattr(self.StringTranslationMap, word) and type1 in self.recordsallowedtypes and type2 in self.subrecordsallowedtypes:
                     self.StringTranslationMap[word]={}
+                    self.StringTranslationMap[word]["id"]=progressiveId
                     self.StringTranslationMap[word]["type1"]=type1
                     self.StringTranslationMap[word]["type2"]=type2
                     self.StringTranslationMap[word]["string"]=word
@@ -45,6 +73,7 @@ class Extractor:
                     self.StringTranslationMap[word]["size_translation"]=-1
                     self.StringTranslationMap[word]["occurrencies"]=[]
                     self.StringTranslationMap[word]["num_occurrencies"]=0
+                    progressiveId+=1
                     f.write(str(self.StringTranslationMap[word])+"\n")
         f.close()
 
