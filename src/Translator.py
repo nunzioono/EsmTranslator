@@ -13,7 +13,7 @@ class Translator:
             record=self.map.values[key]
             record.translation=self.translate(record.string)
 
-        f=open("../data/translations.csv")
+        f=open("../data/translations.csv","w")
         for key in self.map.values:
             f.write(str(self.map.get(key))+"\n")
         f.close()
