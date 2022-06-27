@@ -7,7 +7,6 @@ class StringTranslationRecord:
         self.string=string
         self.string_size=string_size
         self.translation=translation
-        self.translation_size=translation_size
         self.occurrencies=occurrencies
         self.num_occurrencies=num_occurrencies
 

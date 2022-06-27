@@ -5,7 +5,7 @@ class StringTranslationMap:
     def __init__(self):
         self.values={}
         self.progressiveId=1
-        self.recordsallowedtypes=["FACT","KYWD","RACE","MGEF","ENCH","SPEL","ACTI","TACT","ARMO","BOOK","CONT","DOOR","LIGH","MISC","STAT","MSTT","FLOR","FURN","WEAP","AMMO","NPC_","KEYM","ALCH","NOTE","PROJ","TERM","CELL","WRLD","REFR","QUST","INFO","WATR","FLST","PERK","LCTN","MESG","OMOD","INNR","ARMO","BOOK","ALCH","COBJ","INFO"]
+        self.recordsallowedtypes=["FACT","KYWD","RACE","MGEF","ENCH","SPEL","ACTI","TACT","ARMO","BOOK","CONT","DOOR","LIGH","MISC","STAT","MSTT","FLOR","FURN","WEAP","AMMO","NPC_","KEYM","ALCH","NOTE","PROJ","TERM","WRLD","REFR","QUST","INFO","WATR","FLST","PERK","LCTN","MESG","OMOD","INNR","ARMO","BOOK","ALCH","COBJ","INFO"]
         self.subrecordsallowedtypes=["FULL","FMRN","ATTX","ONAM","SHRT","UNAM","BTXT","ITXT","WNAM","NNAM","DESC"]
 
     def put(self,string_translation_record):
@@ -20,10 +20,9 @@ class StringTranslationMap:
         return None
 
     def get(self,word):
-        if not hasattr(self.values,word):
-            return None        
-        else:
+        if word in self.values:
             return self.values[word]
-
+        else:
+            return None
     def __str__(self):
         return "{\n"+",\n".join(["'"+prop+"'"+":'"+str(self.values[prop])+"'" for prop in self.values])+"\n}"
