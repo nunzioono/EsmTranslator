@@ -24,20 +24,7 @@ class Extractor:
                 type2=subrecord.type
                 extract=subrecord.data.decode("Latin-1").strip("\x00")
                 word=str(extract)
-                countminus=word.count("<")
-                if countminus!=0 and countminus%2==0 :
-                    #TODO fix for tag rewriting after translation
-                    soup=BeautifulSoup(word,"html.parser")
-                    word=soup.get_text()
-                    #split the word using < as delimiter
-                    words=word.split("<")
-                    for newword in words:
-                        if newword!="" and newword[0:1]!="/" and ">" in newword:
-                        #set finalword to the substring of word starting at the index of >
-                            finalword=word[word.index(">")+1:]
-                            record=StringTranslationRecord(type1,type2,finalword,len(finalword),"",0,[],0)
-                            self.StringTranslationMap.put(record)
-                elif "\r" in word:
+                if "\r" in word:
                     finalwords=word.split("\r\n")
                     for finalword in finalwords:
                         if len(finalword)>1:
@@ -111,3 +98,19 @@ class Extractor:
                             del value.occurrencies[dele]
                     #else: print("Nessuna occ da eliminare")
                     occtodelete=[]
+
+
+####                countminus=word.count("<")
+#                if countminus!=0 and countminus%2==0 :
+                    #TODO fix for tag rewriting after translation
+#                    soup=BeautifulSoup(word,"html.parser")
+ #                   word=soup.get_text()
+  #                  #split the word using < as delimiter
+   #                 words=word.split("<")
+    #                for newword in words:
+     #                   if newword!="" and newword[0:1]!="/" and ">" in newword:
+      #                  #set finalword to the substring of word starting at the index of >
+       #                     finalword=word[word.index(">")+1:]
+        #                    record=StringTranslationRecord(type1,type2,finalword,len(finalword),"",0,[],0)
+         #                   self.StringTranslationMap.put(record)
+####
