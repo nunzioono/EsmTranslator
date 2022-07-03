@@ -1,7 +1,7 @@
 from StringTranslationMap import StringTranslationMap
 from Extractor import Extractor
 from Translator import Translator
-#from Writer import Writer
+from Writer import Writer
 from sys import argv
 import json
 
@@ -15,4 +15,4 @@ target_lang="IT"
 
 Extractor(path,map)
 Translator(avaiable_translators,map,choice,src_lang,target_lang)
-#Writer(path,map)
+Writer(path,map)
