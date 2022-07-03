@@ -37,12 +37,7 @@ CREATE TABLE IF NOT EXISTS `translators` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci AUTO_INCREMENT=1 ;
 
---
--- Dump dei dati per la tabella `translators`
---
 
-INSERT INTO `translators` (`id`, `name`, `api_key`, `consumption`, `limit`, `created_at`, `last_update`) VALUES
-(1, 'DeepL', 'ddc96844-754b-f50c-0b53-9dacdaf602ef:fx', 202992, 500000, '2022-06-27 17:54:00', '2022-07-03 17:54:04');
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
