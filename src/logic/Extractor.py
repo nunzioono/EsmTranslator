@@ -1,8 +1,8 @@
 from bethesda_structs.plugin import FNVPlugin 
 import re
 from bs4 import BeautifulSoup
-from StringTranslationRecord import StringTranslationRecord
-from StringTranslationMap import StringTranslationMap
+from logic.StringTranslationRecord import StringTranslationRecord
+from logic.StringTranslationMap import StringTranslationMap
 
 class Extractor:
 
