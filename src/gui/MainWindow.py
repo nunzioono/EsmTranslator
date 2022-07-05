@@ -1,6 +1,6 @@
 import sys
-from PyQt5.QtGui import QIcon
-from PyQt5.QtCore import Qt, QPoint
+from PyQt5.QtGui import QIcon, QPixmap
+from PyQt5.QtCore import Qt, QPoint, QDir
 from PyQt5.QtWidgets import QMainWindow, QLabel, QDesktopWidget
 from gui.Navbar import Navbar
 
@@ -8,7 +8,7 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
 
-        self.setWindowIcon(QIcon('assets/Logo.png'))
+        self.setWindowIcon(QIcon(QPixmap(QDir.currentPath()+'/gui/assets/Logo.png')))
         self.setWindowTitle('EsmTranslator')
         self.setFixedSize(1280, 668)
         self.setWindowFlags(Qt.FramelessWindowHint)

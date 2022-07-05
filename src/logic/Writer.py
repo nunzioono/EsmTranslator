@@ -1,6 +1,3 @@
-from lib2to3.refactor import RefactoringTool
-
-
 class Writer:
 
     def __init__(self,path,map):

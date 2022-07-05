@@ -14,7 +14,7 @@ class Navbar(QFrame):
         self.setStyleSheet("background:#191443;")
         layout=QBoxLayout(QBoxLayout.Direction.TopToBottom)
         self.setLayout(layout)
-        self.menu=Menu(self)
+        self.menu=Menu(container)
         
     def mousePressEvent(self, event):
         if(event.x()<=1115):
