@@ -17,7 +17,7 @@ class Navbar(QFrame):
         self.menu=Menu(container)
         
     def mousePressEvent(self, event):
-        if(event.x()<=1115):
+        if(event.x()<=1170):
             self.parent.oldPos = event.globalPos()
         else:
             self.draggable=False
