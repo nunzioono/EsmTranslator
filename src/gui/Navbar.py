@@ -1,5 +1,5 @@
-from PyQt5.QtWidgets import QFrame,QBoxLayout
-from PyQt5.QtCore import Qt, QPoint, QSize
+from PyQt5.QtWidgets import QFrame,QHBoxLayout
+from PyQt5.QtCore import Qt, QPoint, QSize, QMargins
 from gui.Menu import Menu
 
 class Navbar(QFrame):
@@ -9,12 +9,16 @@ class Navbar(QFrame):
         self.draggable=True
         self.parent=container
         self.parent.oldPos = self.parent.pos()
-
+        
         self.setFixedSize(1280,42)
-        self.setStyleSheet("background:#191443;")
-        layout=QBoxLayout(QBoxLayout.Direction.TopToBottom)
-        self.setLayout(layout)
+        self.setStyleSheet("background:#191443;border:0px;margin:0px;padding:0px")
+        layout=QHBoxLayout()
+        layout.setContentsMargins(QMargins(0,0,0,0))
+        layout.setAlignment(Qt.AlignRight)
         self.menu=Menu(container)
+        layout.addWidget(self.menu,Qt.AlignRight,Qt.AlignTop)
+        self.setLayout(layout)
+        self.show()
         
     def mousePressEvent(self, event):
         if(event.x()<=1170):

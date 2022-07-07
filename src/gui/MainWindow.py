@@ -1,7 +1,7 @@
 import sys
 from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtCore import Qt, QPoint, QDir
-from PyQt5.QtWidgets import QMainWindow, QLabel, QDesktopWidget
+from PyQt5.QtWidgets import QMainWindow, QLabel, QDesktopWidget, QVBoxLayout
 from gui.Navbar import Navbar
 
 class MainWindow(QMainWindow):
