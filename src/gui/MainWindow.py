@@ -2,7 +2,7 @@ import sys
 from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtCore import Qt, QPoint, QDir
 from PyQt5.QtWidgets import QMainWindow, QLabel, QDesktopWidget, QVBoxLayout
-from gui.Navbar import Navbar
+from gui.MainContainer import MainContainer
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -14,7 +14,8 @@ class MainWindow(QMainWindow):
         self.setWindowFlags(Qt.FramelessWindowHint)
         self.center()
 
-        self.navbar= Navbar(self)
+        self.container=MainContainer(self)
+        self.setCentralWidget(self.container)
         self.show()
 
     def center(self):

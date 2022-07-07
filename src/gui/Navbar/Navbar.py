@@ -1,6 +1,6 @@
-from PyQt5.QtWidgets import QFrame,QHBoxLayout
+from PyQt5.QtWidgets import QFrame,QHBoxLayout, QGraphicsDropShadowEffect
 from PyQt5.QtCore import Qt, QPoint, QSize, QMargins
-from gui.Menu import Menu
+from gui.Navbar.Menu import Menu
 
 class Navbar(QFrame):
 
@@ -9,13 +9,14 @@ class Navbar(QFrame):
         self.draggable=True
         self.parent=container
         self.parent.oldPos = self.parent.pos()
-        
         self.setFixedSize(1280,42)
-        self.setStyleSheet("background:#191443;border:0px;margin:0px;padding:0px")
+        self.setStyleSheet("background:#4B4591;border:0px;margin:0px;padding:0px")
+
+        self.menu=Menu(container)
+        
         layout=QHBoxLayout()
         layout.setContentsMargins(QMargins(0,0,0,0))
         layout.setAlignment(Qt.AlignRight)
-        self.menu=Menu(container)
         layout.addWidget(self.menu,Qt.AlignRight,Qt.AlignTop)
         self.setLayout(layout)
         self.show()
