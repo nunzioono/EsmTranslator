@@ -14,7 +14,7 @@ class MainContainer(QFrame):
 
         layout= QVBoxLayout()
         layout.setContentsMargins(QMargins(0,0,0,0))
-        layout.setSpacing(21)
+        layout.setSpacing(50)
         layout.setAlignment(Qt.AlignTop)
         layout.addWidget(self.navbar)
         layout.addWidget(self.body)
