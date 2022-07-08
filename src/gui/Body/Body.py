@@ -12,7 +12,7 @@ class Body(QFrame):
         self.translators=Translators(container)
 
         layout=QVBoxLayout()
-        layout.setSpacing(30)
+        layout.setSpacing(0)
         layout.setContentsMargins(QMargins(0,0,0,0))
         layout.addWidget(self.header)
         layout.addWidget(self.translators)
