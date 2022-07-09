@@ -29,7 +29,9 @@ class Header(QFrame):
         self.frame2.setLayout(layout)
 
         self.selectionlabel=QLabel()
-        self.selectionlabel.setFont(QFont("Noto Sans",12))
+        font=QFont("Noto Sans",12)
+        font.setBold(True)
+        self.selectionlabel.setFont(font)
         self.selectionlabel.setText("Seleziona un traduttore per continuare:")
         self.selectionlabel.setStyleSheet("color:white")
 

@@ -18,7 +18,7 @@ class Translator(QFrame):
         self.paintedarc=RoundedProgressBar(self)
         self.paintedarc.show()
 
-        string="""self.frame1=QFrame(self)
+        self.frame1=QFrame(self)
         self.frame1.setStyleSheet('''QFrame{
             border-width: 0px;
         }''')
@@ -75,13 +75,13 @@ class Translator(QFrame):
         layout2.addWidget(self.consume,Qt.AlignTop,Qt.AlignCenter)        
         layout2.addWidget(self.renewdate,Qt.AlignTop,Qt.AlignCenter)        
         self.frame2.setLayout(layout2)
-"""
+
         layout=QVBoxLayout()
         layout.setSpacing(0)
         layout.setContentsMargins(QMargins(0,0,0,0))
         layout.addWidget(self.paintedarc,Qt.AlignTop,Qt.AlignCenter)
-        #layout.addWidget(self.frame1,Qt.AlignTop,Qt.AlignCenter)
-        #layout.addWidget(self.frame2,Qt.AlignTop,Qt.AlignCenter)
+        layout.addWidget(self.frame1,Qt.AlignTop,Qt.AlignCenter)
+        layout.addWidget(self.frame2,Qt.AlignTop,Qt.AlignCenter)
         self.setLayout(layout)
         self.show()
 
