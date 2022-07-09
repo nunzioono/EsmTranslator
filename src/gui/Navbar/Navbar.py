@@ -9,7 +9,7 @@ class Navbar(QFrame):
         self.draggable=True
         self.parent=container
         self.parent.oldPos = self.parent.pos()
-        self.setFixedSize(1280,42)
+        self.setFixedSize(1280,35)
         self.setStyleSheet("background:#4B4591;border:0px;margin:0px;padding:0px")
 
         self.menu=Menu(container)

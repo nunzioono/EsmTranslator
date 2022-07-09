@@ -7,12 +7,15 @@ class Translators(QFrame):
 
     def __init__(self,parent):
         super().__init__(parent)
+        self.setFixedSize(480,220)
+
         self.translatoractive=Translator(self)
         self.translatorunactive=Translator(self)
 
+
         layout=QHBoxLayout()
         layout.setContentsMargins(QMargins(0,0,0,0))
-        layout.setSpacing(0)
+        layout.setSpacing(36)
         layout.addWidget(self.translatoractive)
         layout.addWidget(self.translatorunactive)
         self.setLayout(layout)
