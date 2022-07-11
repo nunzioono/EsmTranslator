@@ -5,17 +5,17 @@ from gui.Body.Translator import Translator
 
 class Translators(QFrame):
 
-    def __init__(self,parent):
+    def __init__(self,parent,forwardbutton):
         super().__init__(parent)
         self.setFixedSize(480,220)
 
-        self.translatoractive=Translator(self,True)
-        self.translatorunactive=Translator(self,False)
+        self.translatoractive=Translator(self,True,forwardbutton)
+        self.translatorunactive=Translator(self,False,forwardbutton)
 
 
         layout=QHBoxLayout()
+        layout.setStretch(0,0)
         layout.setContentsMargins(QMargins(0,0,0,0))
-        layout.setSpacing(36)
         layout.addWidget(self.translatoractive)
         layout.addWidget(self.translatorunactive)
         self.setLayout(layout)

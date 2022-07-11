@@ -13,7 +13,6 @@ class RoundedProgressBar(QWidget):
         self.show()
 
     def paintEvent(self, event):
-        print("I got invoked!")
         qp = QPainter()
         qp.begin(self)
         qp.setRenderHint(QPainter.Antialiasing)
@@ -29,7 +28,6 @@ class RoundedProgressBar(QWidget):
         pen2=QPen(color2, 15, cap=Qt.RoundCap)
         qp.setPen(pen2)
         alenght=math.floor(self.consume/self.limit*240)
-        print(alenght)
         astart=210-alenght
         qp.drawArc(8,20,180,180,16*astart,16*alenght)
         qp.end()

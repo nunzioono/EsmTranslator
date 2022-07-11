@@ -1,19 +1,19 @@
-import math
-from PyQt5.QtWidgets import QFrame,QGridLayout,QVBoxLayout,QPushButton,QLabel
-from PyQt5.QtCore import Qt, QPoint, QSize, QMargins, QDir
+from PyQt5.QtWidgets import QFrame,QGridLayout,QVBoxLayout,QPushButton,QLabel,QWidget
+from PyQt5.QtCore import Qt, QPoint, QSize, QMargins, QDir, QEvent
 from PyQt5.QtGui import QIcon, QPixmap, QFont
-from requests import request
-import requests
+import requests, math, json
 from gui.Body.RoundedProgressBar import RoundedProgressBar
-import json
 from datetime import datetime
 
 class Translator(QFrame):
 
-    def __init__(self,parent,active):
+    def __init__(self,parent,active,button):
         super().__init__(parent)
         self.setFixedSize(220, 220)
+        self.forwardButton=button
         self.active=active
+        self.selected=False
+            
         if self.active:
             self.setStyleSheet("""QFrame{
                 padding:10px;
@@ -22,48 +22,63 @@ class Translator(QFrame):
             }""")
 
             self.getData()
-
+            
+            self.selector=QLabel(self)
+            self.selector.setFixedSize(50,50)
+            self.selector.setPixmap(QPixmap(QDir.currentPath()+'/gui/assets/Check.png'))
+            self.selector.setStyleSheet("""QLabel{
+                    border-width:0px;
+                }""")
+            self.selector.hide()
             self.paintedarc=RoundedProgressBar(self,self.consumption,self.limit)
             self.move(15,15)
             self.paintedarc.show()
             self.setFrame1()
             self.setFrame2()
 
-            layout=QGridLayout()
-            layout.setSpacing(0)
-            layout.setContentsMargins(QMargins(0,0,0,0))
-            layout.addWidget(self.frame1,2,2,4,4)
-            layout.addWidget(self.frame2,6,2,2,4)
-            layout.addWidget(self.paintedarc,0,0,8,8)
+            self.layout=QGridLayout()
+            self.layout.setSpacing(0)
+            self.layout.setContentsMargins(QMargins(0,0,0,0))
+            self.layout.addWidget(self.selector,0,0,1,1)
+            self.layout.addWidget(self.frame1,2,2,4,4)
+            self.layout.addWidget(self.frame2,6,2,2,4)
+            self.layout.addWidget(self.paintedarc,0,0,8,8)
         else:
-            self.setStyleSheet("""QFrame{
-                padding:10px;
-                border: 2px dashed #707070;
-                border-radius: 25px;
-            }""")
+            self.setToolTip("Prossimamente!")
 
             label=QLabel(self)
-            print(QDir.currentPath())
-            label.setPixmap(QPixmap(QDir.currentPath()+'/gui/assets/Piu.png'))
-            label.setFixedSize(70,70)
-            label.setStyleSheet("""QLabel{
-                    padding:10px;
-                    border-width:2px;
-                    border-style:dashed;
-                    border-color:#707070;
-                    border-radius: 35px;
-                }""")
+            label.setPixmap(QPixmap(QDir.currentPath()+'/gui/assets/Traduttore vuoto.png'))
 
-            layout=QVBoxLayout()
-            layout.setSpacing(0)
-            layout.setContentsMargins(QMargins(0,0,0,0))
-            layout.addWidget(label,Qt.AlignCenter,Qt.AlignCenter)
+            self.layout=QVBoxLayout()
+            self.layout.setSpacing(0)
+            self.layout.setContentsMargins(QMargins(0,0,0,0))
+            self.layout.addWidget(label,Qt.AlignCenter,Qt.AlignCenter)
         #layout.setCurrentIndex(2)
-        self.setLayout(layout)
+        self.setLayout(self.layout)
         self.show()
 
     def mousePressEvent(self, event):
-        print("!")
+        if self.active:
+            self.selected=not self.selected
+            if(self.selected):
+                self.selector.show()
+                self.setStyleSheet("""QFrame{
+                padding:10px;
+                border: 2px solid #707070;
+                border-radius: 25px;
+                background:white;
+            }""")
+                self.forwardButton.show()
+            else:
+                self.selector.hide()
+                self.setStyleSheet("""QFrame{
+                padding:10px;
+                border: 2px solid #707070;
+                border-radius: 25px;
+                background:transparent;
+            }""")
+                self.forwardButton.hide()
+
 
     def round1k(self,number):
         div=number/1000
@@ -122,7 +137,7 @@ class Translator(QFrame):
                                     }''')
         self.renewdate=QLabel(self.frame2)
         self.renewdate.setFont(QFont("Noto Sans",6))
-        self.renewdate.setText("Reset il "+self.lastupdate)
+        self.renewdate.setText("Reset il "+self.nextupdate)
         self.renewdate.setStyleSheet('''QLabel{
                                     padding:0px;
                                     border-width: 0px;
@@ -140,9 +155,23 @@ class Translator(QFrame):
         response=requests.get("http://esmtranslator.altervista.org/api/translator/read.php")
         jsonresponse=json.loads(response.text)
         record=jsonresponse["records"][0]
-        print(record)
         self.consumption=int(record["consumption"])
         self.limit=int(record["limit"])
-        created_at=datetime.strptime(record["created_at"], '%y-%m-%d %H:%M:%S')
-        print(created_at.strftime("%m/%d/%Y"))
-        self.nextupdate=created_at.strftime("%m/%d/%Y")
+        created_at=datetime.strptime(record["created_at"], '%Y-%m-%d %H:%M:%S')
+        creation_day=int(created_at.strftime("%d"))
+        creation_month=int(created_at.strftime("%m"))
+        now=datetime.now()
+        now_day=int(now.strftime("%d"))
+        now_month=int(now.strftime("%m"))
+        now_year=int(now.strftime("%Y"))
+        if(now_day<=creation_day):
+            update_month=str(now_month)
+            update_year=str(now_year)
+        else:
+            if(now_month==12):
+                update_month=str(1)
+                update_year=str(now_year+1)
+            else:
+                update_month=str(now_month+1)
+                update_year=str(now_year)
+        self.nextupdate=str(creation_day)+"/"+update_month+"/"+update_year
