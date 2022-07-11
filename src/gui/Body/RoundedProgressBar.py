@@ -1,11 +1,14 @@
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
+import math
 
 class RoundedProgressBar(QWidget):
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    def __init__(self,parent,consume=0,limit=500000):
+        super().__init__(parent)
+        self.consume=consume
+        self.limit=limit
         self.setFixedSize(220,220)
         self.show()
 
@@ -21,12 +24,12 @@ class RoundedProgressBar(QWidget):
         brush.setColor(color)
         brush.setStyle(Qt.SolidPattern)
         qp.setBrush(brush)
-        qp.drawArc(17,20,160,160,16*-30,16*240)
+        qp.drawArc(8,20,180,180,16*-30,16*240)
         color2=QColor(43,85,252)
         pen2=QPen(color2, 15, cap=Qt.RoundCap)
         qp.setPen(pen2)
-        qp.drawArc(17,20,160,160,16*-30,16*210)
- #       qp.drawArc(20,20,160,160,16*-30,16*240)
- #       qp.drawArc(12,135,20,20,16*-135,16*180)
- #       qp.drawArc(168,135,20,20,16*135,16*180)
+        alenght=math.floor(self.consume/self.limit*240)
+        print(alenght)
+        astart=210-alenght
+        qp.drawArc(8,20,180,180,16*astart,16*alenght)
         qp.end()

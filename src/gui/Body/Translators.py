@@ -9,8 +9,8 @@ class Translators(QFrame):
         super().__init__(parent)
         self.setFixedSize(480,220)
 
-        self.translatoractive=Translator(self)
-        self.translatorunactive=Translator(self)
+        self.translatoractive=Translator(self,True)
+        self.translatorunactive=Translator(self,False)
 
 
         layout=QHBoxLayout()
