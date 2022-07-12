@@ -5,13 +5,15 @@ from attr import has
 from gui.Body.ForwardButton import ForwardButton
 from gui.Body.Header import Header
 from gui.Body.Translators import Translators
+from gui.Body.FileUploader import FileUploader
 
 class Body(QFrame):
 
-    page=1
+    page=2
 
     def __init__(self,container):
         super().__init__(container)
+        self.setFixedWidth(1280)
         self.layout=QVBoxLayout()
         self.layout.setContentsMargins(QMargins(0,0,0,0))
         self.layout.setStretch(0,0)
@@ -26,18 +28,23 @@ class Body(QFrame):
     def update(self):
         print(Body.page)
         print(self.layout)
-        self.header=Header(self,Body.page,self.previous)
+        selector=True
+        if Body.page>1:
+            selector=False
+        self.header=Header(self,Body.page,self.previous,selector)
         self.layout.addWidget(self.header,Qt.AlignCenter,Qt.AlignCenter)
         self.forwardbutton=ForwardButton(self)
         self.forwardbutton.clicked.connect(self.next)
+        self.forwardbutton.hide()
 
         match Body.page:
             case 1:
                 self.translators=Translators(self,self.forwardbutton)
                 self.layout.addWidget(self.translators,Qt.AlignCenter,Qt.AlignCenter)
             case 2:
-                self.translators=Translators(self,self.forwardbutton)
-                self.layout.addWidget(self.translators,Qt.AlignCenter,Qt.AlignCenter)
+                print("pagina 2")
+                self.fileuploader=FileUploader(self)
+                self.layout.addWidget(self.fileuploader,Qt.AlignCenter,Qt.AlignCenter)
             # If an exact match is not confirmed, this last case will be used if provided
             case _:
                 print("Page navigation error")
