@@ -4,16 +4,17 @@ from PyQt5.QtGui import QIcon, QPixmap, QFont
 
 class Header(QFrame):
 
-    def __init__(self,parent,mode=""):
+    def __init__(self,parent,page,previous):
         super().__init__(parent)
 
         self.frame2=QFrame(self)
 
-        if mode=="back":
+        if page>1:
             self.arrowback=QPushButton(self.frame2)
             self.arrowback.setFixedSize(11, 30)
             self.arrowback.setStyleSheet("border:0px;")
             self.arrowback.setIcon(QIcon(QPixmap(QDir.currentPath()+'/gui/assets/Arrow Back.png')))
+            self.arrowback.clicked.connect(previous)
         self.logotype=QLabel(self.frame2)
         self.logotype.setFixedSize(380, 30)
         self.logotype.setPixmap(QPixmap(QDir.currentPath()+'/gui/assets/Logotype.png'))
@@ -21,11 +22,9 @@ class Header(QFrame):
         layout=QHBoxLayout()
         layout.setSpacing(0)
         layout.setContentsMargins(QMargins(0,0,0,0))
-        if mode=="back":
+        if page>1:
             layout.addWidget(self.arrowback)
         layout.addWidget(self.logotype)
-        if mode=="back":
-            layout.insertSpacing(2, 220)
         self.frame2.setLayout(layout)
 
         self.selectionlabel=QLabel()
