@@ -4,12 +4,13 @@ from PyQt5.QtCore import Qt, QPoint, QSize, QMargins
 from attr import has
 from gui.Body.ForwardButton import ForwardButton
 from gui.Body.Header import Header
+from gui.Body.LoadingBar import LoadingBar
 from gui.Body.Translators import Translators
 from gui.Body.FileUploader import FileUploader
 
 class Body(QFrame):
 
-    page=2
+    page=3
 
     def __init__(self,container):
         super().__init__(container)
@@ -42,6 +43,9 @@ class Body(QFrame):
             case 2:
                 self.fileuploader=FileUploader(self,self.forwardbutton)
                 self.layout.addWidget(self.fileuploader,Qt.AlignCenter,Qt.AlignCenter)
+            case 3:
+                self.loadingbar=LoadingBar(self,self.forwardbutton,1)
+                self.layout.addWidget(self.loadingbar,Qt.AlignCenter,Qt.AlignCenter)
             # If an exact match is not confirmed, this last case will be used if provided
             case _:
                 print("Page navigation error")
