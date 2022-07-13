@@ -1,5 +1,6 @@
-from PyQt5.QtWidgets import QLabel, QWidget, QGridLayout
+from PyQt5.QtWidgets import QLabel, QWidget, QGridLayout, QVBoxLayout
 from PyQt5.QtGui import QFont
+from PyQt5.Qt import Qt
 import math
 
 class LoadingBar(QWidget):
@@ -8,6 +9,8 @@ class LoadingBar(QWidget):
 
     def __init__(self,parent,forwardbutton,perc):
         super().__init__(parent)
+        self.perc=perc
+        self.forwardbutton=forwardbutton
         self.layout=QGridLayout()
         self.layout.setContentsMargins(0,0,0,0)
         
@@ -17,6 +20,9 @@ class LoadingBar(QWidget):
         self.show()
 
     def update(self):
+
+        layout=QGridLayout()
+
         self.label=QLabel(self)
         self.label.setFixedSize(LoadingBar.TOTAL_SIZE,28)
         self.label.setStyleSheet("""QLabel{
@@ -34,21 +40,42 @@ class LoadingBar(QWidget):
         }""")
 
         
-        ncols=math.floor((LoadingBar.TOTAL_SIZE-4)*perc)
+        ncols=math.floor((LoadingBar.TOTAL_SIZE-4)*self.perc)
 
         self.label3=QLabel(self)
         font=QFont("Noto sans",12)
         font.setBold(True)
         self.label3.setFont(font)
-        self.label3.setText(str(math.floor(perc*100))+"%")
+        self.label3.setText(str(math.floor(self.perc*100))+"%")
         self.label3.setStyleSheet("""QLabel{
             color:white;
             background:transparent;
         }""")
 
-        self.layout.addWidget(self.label,0,0,28,LoadingBar.TOTAL_SIZE)
-        self.layout.addWidget(self.label2,1,2,26,ncols)
-        self.layout.addWidget(self.label3,1,416,26,40)
+        layout.addWidget(self.label,0,0,28,LoadingBar.TOTAL_SIZE)
+        layout.addWidget(self.label2,1,2,26,ncols)
+        layout.addWidget(self.label3,1,406,26,40)
+
+        self.label4=QLabel(self)
+        font=QFont("Noto sans",12)
+        font.setBold(True)
+        self.label4.setFont(font)
+        if self.perc<1:
+            self.label4.setText("Sto estraendo le stringhe dal file...")
+        else:
+            self.label4.setText("Estrazione completata.")
+        self.label4.setStyleSheet("""QLabel{
+            color:white;
+            background:transparent;
+        }""")
+
+        self.layout=QVBoxLayout()
+        self.layout.setContentsMargins(0,0,0,0)
+        self.layout.addLayout(layout)
+        self.layout.addSpacing(50)
+        self.layout.addWidget(self.label4,Qt.AlignCenter,Qt.AlignCenter)
+        if self.perc==1:
+            self.forwardbutton.show()
 
     def removeAll(self):
         items = (self.layout.itemAt(i) for i in range(self.layout.count())) 
