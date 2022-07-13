@@ -26,8 +26,6 @@ class Body(QFrame):
         
 
     def update(self):
-        print(Body.page)
-        print(self.layout)
         selector=True
         if Body.page>1:
             selector=False
@@ -42,8 +40,7 @@ class Body(QFrame):
                 self.translators=Translators(self,self.forwardbutton)
                 self.layout.addWidget(self.translators,Qt.AlignCenter,Qt.AlignCenter)
             case 2:
-                print("pagina 2")
-                self.fileuploader=FileUploader(self)
+                self.fileuploader=FileUploader(self,self.forwardbutton)
                 self.layout.addWidget(self.fileuploader,Qt.AlignCenter,Qt.AlignCenter)
             # If an exact match is not confirmed, this last case will be used if provided
             case _:
@@ -53,14 +50,12 @@ class Body(QFrame):
         self.layout.addWidget(self.forwardbutton,Qt.AlignCenter,Qt.AlignCenter)
 
     def next(self):
-        print(self.page)
         if Body.page<6:
             Body.page+=1
         self.removeAll()
         self.update()
 
     def previous(self):
-        print(self.page)
         if Body.page>1:
             Body.page-=1
         self.removeAll()
