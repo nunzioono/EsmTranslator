@@ -3,9 +3,9 @@ class Database
 	{
 	// credenziali
 	private $host = "localhost";
-	private $db_name = "my_nodev";
-	private $username = "nodev";
-	private $password = "C7XAvD79qNdD";
+	private $db_name = "my_esmtranslator";
+	private $username = "esmtranslator";
+	private $password = "F2dsBTkAMZDs";
 	public $conn;
 	// connessione al database
 	public function getConnection()
