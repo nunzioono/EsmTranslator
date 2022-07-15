@@ -2,6 +2,7 @@ from PyQt5.QtWidgets import QFrame,QVBoxLayout, QLabel
 from PyQt5.QtGui import QFont
 from PyQt5.QtCore import Qt, QPoint, QSize, QMargins
 from attr import has
+from gui.Body.FileDownloader import FileDownloader
 from gui.Body.ForwardButton import ForwardButton
 from gui.Body.Header import Header
 from gui.Body.LoadingBar import LoadingBar
@@ -12,7 +13,7 @@ from gui.Body.TranslationLoading import TranslationLoading
 
 class Body(QFrame):
 
-    page=5
+    page=6
 
     def __init__(self,container):
         super().__init__(container)
@@ -54,6 +55,9 @@ class Body(QFrame):
             case 5:
                 self.translationloading=TranslationLoading(self,self.forwardbutton,1)
                 self.layout.addWidget(self.translationloading,Qt.AlignCenter,Qt.AlignCenter)
+            case 6:
+                self.filedownloader=FileDownloader(self,self.forwardbutton)
+                self.layout.addWidget(self.filedownloader,Qt.AlignCenter,Qt.AlignCenter)
             # If an exact match is not confirmed, this last case will be used if provided
             case _:
                 print("Page navigation error")

@@ -3,10 +3,10 @@ from PyQt5.QtGui import QFont
 
 class ForwardButton(QPushButton):
 
-    def __init__(self,parent,text="AVANTI",font_size=12):
+    def __init__(self,parent,text="AVANTI",font_size=12,width=133,height=41):
         super().__init__(parent)
         self.setText(text)
-        self.setFixedSize(133,41)
+        self.setFixedSize(width,height)
         self.setFont(QFont("Noto sans",font_size))
         self.setStyleSheet("""QPushButton{
             background:#2B55FC;
