@@ -7,9 +7,10 @@ class LoadingBar(QWidget):
 
     TOTAL_SIZE=854
 
-    def __init__(self,parent,forwardbutton,perc):
+    def __init__(self,parent,forwardbutton,perc,textenabled=False):
         super().__init__(parent)
         self.perc=perc
+        self.textenabled=textenabled
         self.forwardbutton=forwardbutton
         self.layout=QGridLayout()
         self.layout.setContentsMargins(0,0,0,0)
@@ -56,24 +57,26 @@ class LoadingBar(QWidget):
         layout.addWidget(self.label2,1,2,26,ncols)
         layout.addWidget(self.label3,1,406,26,40)
 
-        self.label4=QLabel(self)
-        font=QFont("Noto sans",12)
-        font.setBold(True)
-        self.label4.setFont(font)
-        if self.perc<1:
-            self.label4.setText("Sto estraendo le stringhe dal file...")
-        else:
-            self.label4.setText("Estrazione completata.")
-        self.label4.setStyleSheet("""QLabel{
-            color:white;
-            background:transparent;
-        }""")
+        if(self.textenabled):
+            self.label4=QLabel(self)
+            font=QFont("Noto sans",12)
+            font.setBold(True)
+            self.label4.setFont(font)
+            if self.perc<1:
+                self.label4.setText("Sto estraendo le stringhe dal file...")
+            else:
+                self.label4.setText("Estrazione completata.")
+            self.label4.setStyleSheet("""QLabel{
+                color:white;
+                background:transparent;
+            }""")
 
         self.layout=QVBoxLayout()
         self.layout.setContentsMargins(0,0,0,0)
         self.layout.addLayout(layout)
-        self.layout.addSpacing(50)
-        self.layout.addWidget(self.label4,Qt.AlignCenter,Qt.AlignCenter)
+        if(self.textenabled):
+            self.layout.addSpacing(50)
+            self.layout.addWidget(self.label4,Qt.AlignCenter,Qt.AlignCenter)
         if self.perc==1:
             self.forwardbutton.show()
 
