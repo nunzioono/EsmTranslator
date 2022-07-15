@@ -7,8 +7,10 @@ class LoadingBar(QWidget):
 
     TOTAL_SIZE=854
 
-    def __init__(self,parent,forwardbutton,perc,textenabled=False):
+    def __init__(self,parent,forwardbutton,perc,textenabled=False,loadingtext="",completetext=""):
         super().__init__(parent)
+        self.loadingtext=loadingtext
+        self.completetext=completetext
         self.perc=perc
         self.textenabled=textenabled
         self.forwardbutton=forwardbutton
@@ -63,9 +65,9 @@ class LoadingBar(QWidget):
             font.setBold(True)
             self.label4.setFont(font)
             if self.perc<1:
-                self.label4.setText("Sto estraendo le stringhe dal file...")
+                self.label4.setText(self.loadingtext)
             else:
-                self.label4.setText("Estrazione completata.")
+                self.label4.setText(self.completetext)
             self.label4.setStyleSheet("""QLabel{
                 color:white;
                 background:transparent;

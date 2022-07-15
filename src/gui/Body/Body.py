@@ -13,7 +13,7 @@ from gui.Body.TranslationLoading import TranslationLoading
 
 class Body(QFrame):
 
-    page=6
+    page=7
 
     def __init__(self,container):
         super().__init__(container)
@@ -47,7 +47,7 @@ class Body(QFrame):
                 self.fileuploader=FileUploader(self,self.forwardbutton)
                 self.layout.addWidget(self.fileuploader,Qt.AlignCenter,Qt.AlignCenter)
             case 3:
-                self.loadingbar=LoadingBar(self,self.forwardbutton,1,True)
+                self.loadingbar=LoadingBar(self,self.forwardbutton,1,True,"Sto estraendo le stringhe dal file...","Estrazione completata.")
                 self.layout.addWidget(self.loadingbar,Qt.AlignCenter,Qt.AlignCenter)
             case 4:
                 self.selectors=Selectors(self,self.forwardbutton)
@@ -58,6 +58,11 @@ class Body(QFrame):
             case 6:
                 self.filedownloader=FileDownloader(self,self.forwardbutton)
                 self.layout.addWidget(self.filedownloader,Qt.AlignCenter,Qt.AlignCenter)
+            case 7:
+                self.forwardbutton=ForwardButton(self,"TORNA ALLA HOME",10,170,41)
+                self.forwardbutton.clicked.connect(self.next)
+                self.filedownloader=LoadingBar(self,self.forwardbutton,1,True,"Sto scrivendo la traduzione...","Traduzione completata.")
+                self.layout.addWidget(self.filedownloader,Qt.AlignCenter,Qt.AlignCenter)
             # If an exact match is not confirmed, this last case will be used if provided
             case _:
                 print("Page navigation error")
@@ -66,8 +71,10 @@ class Body(QFrame):
         self.layout.addWidget(self.forwardbutton,Qt.AlignCenter,Qt.AlignCenter)
 
     def next(self):
-        if Body.page<6:
+        if Body.page<7:
             Body.page+=1
+        elif Body.page==7:
+            Body.page=1
         self.removeAll()
         self.update()
 
