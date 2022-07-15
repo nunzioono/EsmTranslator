@@ -7,10 +7,11 @@ from gui.Body.Header import Header
 from gui.Body.LoadingBar import LoadingBar
 from gui.Body.Translators import Translators
 from gui.Body.FileUploader import FileUploader
+from gui.Body.Selectors import Selectors
 
 class Body(QFrame):
 
-    page=3
+    page=4
 
     def __init__(self,container):
         super().__init__(container)
@@ -46,6 +47,9 @@ class Body(QFrame):
             case 3:
                 self.loadingbar=LoadingBar(self,self.forwardbutton,1)
                 self.layout.addWidget(self.loadingbar,Qt.AlignCenter,Qt.AlignCenter)
+            case 4:
+                self.selectors=Selectors(self,self.forwardbutton)
+                self.layout.addWidget(self.selectors,Qt.AlignCenter,Qt.AlignCenter)
             # If an exact match is not confirmed, this last case will be used if provided
             case _:
                 print("Page navigation error")
