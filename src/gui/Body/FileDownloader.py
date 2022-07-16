@@ -100,3 +100,6 @@ la traduzione del file:""")
         if fname!="":
             FileDownloader.FILE_PATH=fname
             self.invert()
+
+    def getOutputPath(self):
+        return FileDownloader.FILE_PATH

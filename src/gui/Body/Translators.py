@@ -21,3 +21,6 @@ class Translators(QFrame):
         self.setLayout(layout)
 
         self.show()
+
+    def getTranslators(self):
+        self.translatoractive.getTranslators()

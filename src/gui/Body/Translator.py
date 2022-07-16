@@ -1,3 +1,4 @@
+from zoneinfo import available_timezones
 from PyQt5.QtWidgets import QFrame,QGridLayout,QVBoxLayout,QPushButton,QLabel,QWidget
 from PyQt5.QtCore import Qt, QPoint, QSize, QMargins, QDir, QEvent
 from PyQt5.QtGui import QIcon, QPixmap, QFont
@@ -6,6 +7,9 @@ from gui.Body.RoundedProgressBar import RoundedProgressBar
 from datetime import datetime
 
 class Translator(QFrame):
+
+    available_translators=[]
+    choice=-1
 
     def __init__(self,parent,active,button):
         super().__init__(parent)
@@ -154,7 +158,9 @@ class Translator(QFrame):
     def getData(self):
         response=requests.get("http://esmtranslator.altervista.org/api/translator/read.php")
         jsonresponse=json.loads(response.text)
-        record=jsonresponse["records"][0]
+        Translator.available_translators=jsonresponse["records"]
+        Translator.choice=0
+        record=self.available_translators[self.choice]
         self.consumption=int(record["consumption"])
         self.limit=int(record["limit"])
         created_at=datetime.strptime(record["created_at"], '%Y-%m-%d %H:%M:%S')
@@ -175,3 +181,6 @@ class Translator(QFrame):
                 update_month=str(now_month+1)
                 update_year=str(now_year)
         self.nextupdate=str(creation_day)+"/"+update_month+"/"+update_year
+
+    def getTranslators(self):
+        return [Translator.available_translators,Translator.choice]

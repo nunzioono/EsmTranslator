@@ -86,3 +86,6 @@ class Selectors(QWidget):
             Selectors.current_target=Selectors.language_target[index_target]["language_tag"]
         else:
             self.forwardbutton.hide()
+
+    def getLanguages(self):
+        return [Selectors.current_src,Selectors.current_target]

@@ -7,8 +7,9 @@ class LoadingBar(QWidget):
 
     TOTAL_SIZE=854
 
-    def __init__(self,parent,forwardbutton,perc,textenabled=False,loadingtext="",completetext=""):
+    def __init__(self,parent,forwardbutton,perc,extractor,textenabled=False,loadingtext="",completetext=""):
         super().__init__(parent)
+        self.extractor=extractor
         self.loadingtext=loadingtext
         self.completetext=completetext
         self.perc=perc

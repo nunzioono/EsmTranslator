@@ -7,6 +7,7 @@ from logic.StringTranslationMap import StringTranslationMap
 class Extractor:
 
     def __init__(self, plugin_path,string_translation_map):
+        print(plugin_path)
         self.plugin_path=plugin_path
         self.plugin=FNVPlugin.parse_file(self.plugin_path)
         self.plugin= self.plugin.parse_file(plugin_path)

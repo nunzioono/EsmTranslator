@@ -92,8 +92,11 @@ class FileUploader(QWidget):
         fname = QFileDialog.getOpenFileName(self, 'Open file', 
          'c:\\',"Bethesda files (*.esm *.esp)")
         if fname[0]!="":
-            FileUploader.FILE_PATH=fname[0]
+            file_path=fname[0]
+            tmp=file_path[file_path.rfind("file:///")+1:]
+            FileUploader.FILE_PATH=tmp
             FileUploader.FILE_NAME=fname[0][FileUploader.FILE_PATH.rfind("/")+1:]
+            self.input_path=FileUploader.FILE_PATH
             self.invert()
 
     def dragEnterEvent(self, event):
@@ -102,7 +105,9 @@ class FileUploader(QWidget):
         file_path=event.mimeData().text()
         file_extension=file_path[file_path.rfind("."):]
         if file_extension==".esm" or file_extension==".esp":
-            FileUploader.FILE_PATH=file_path
+            tmp=file_path[file_path.rfind("/")+1:]
+            tmp=tmp[tmp.rfind("file:///")+1:]
+            FileUploader.FILE_PATH=tmp
             FileUploader.FILE_NAME=FileUploader.FILE_PATH[FileUploader.FILE_PATH.rfind("/")+1:]
             event.accept()
         else:
@@ -112,3 +117,6 @@ class FileUploader(QWidget):
     def dropEvent(self, event):
         self.invert()
         return super().dropEvent(event)
+
+    def getInputPath(self):
+        return FileUploader.FILE_PATH
