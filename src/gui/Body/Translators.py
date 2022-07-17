@@ -23,4 +23,4 @@ class Translators(QFrame):
         self.show()
 
     def getTranslators(self):
-        self.translatoractive.getTranslators()
+        return self.translatoractive.getTranslators()

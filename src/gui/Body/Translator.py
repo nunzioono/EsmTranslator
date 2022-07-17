@@ -162,6 +162,7 @@ class Translator(QFrame):
         Translator.choice=0
         record=self.available_translators[self.choice]
         self.consumption=int(record["consumption"])
+        print(self.consumption)
         self.limit=int(record["limit"])
         created_at=datetime.strptime(record["created_at"], '%Y-%m-%d %H:%M:%S')
         creation_day=int(created_at.strftime("%d"))

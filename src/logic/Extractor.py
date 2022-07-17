@@ -1,10 +1,14 @@
 from bethesda_structs.plugin import FNVPlugin 
 import re
 from bs4 import BeautifulSoup
-from logic.StringTranslationRecord import StringTranslationRecord
-from logic.StringTranslationMap import StringTranslationMap
+from StringTranslationRecord import StringTranslationRecord
+from StringTranslationMap import StringTranslationMap
+import math
 
 class Extractor:
+
+    current_size_processed=0
+    total_size=0
 
     def __init__(self, plugin_path,string_translation_map):
         print(plugin_path)
@@ -30,20 +34,26 @@ class Extractor:
                     for finalword in finalwords:
                         if len(finalword)>1:
                             record=StringTranslationRecord(type1,type2,finalword,len(finalword),"",0,[],0)
+                            Extractor.total_size+=subrecord.data_size
                             self.StringTranslationMap.put(record)
                 elif word != "" and not re.match("[^\x00-\x7F]+",word) and len(word)>1:
                     record=StringTranslationRecord(type1,type2,word,len(word),"",0,[],0)
                     if record!=None:
                         returned_record=self.StringTranslationMap.put(record)                    
+                        Extractor.total_size+=subrecord.data_size
+
+
+        print("Total size: "+str(Extractor.total_size))
 
     def populateMap(self):
 
         #open the file read text
         with open(self.plugin_path, "rb") as file:
 
-            text=file.read()
-            text=text.decode("Latin-1")
-
+            text=file.read().decode("Latin-1")
+            f=open("text.txt","w")
+            f.write(text)
+            f.close()
             #check for each word if it is in the text
         
             for key in self.StringTranslationMap.values.keys():
@@ -60,7 +70,9 @@ class Extractor:
                 #if not pass
                 else:
                     pass
-
+                Extractor.current_size_processed+=record.string_size
+                perc=(Extractor.current_size_processed/Extractor.total_size)*100
+                print(str(math.floor(perc))+"%")
             file.close()
 
     def pruneMap(self):
@@ -100,18 +112,5 @@ class Extractor:
                     #else: print("Nessuna occ da eliminare")
                     occtodelete=[]
 
-
-####                countminus=word.count("<")
-#                if countminus!=0 and countminus%2==0 :
-                    #TODO fix for tag rewriting after translation
-#                    soup=BeautifulSoup(word,"html.parser")
- #                   word=soup.get_text()
-  #                  #split the word using < as delimiter
-   #                 words=word.split("<")
-    #                for newword in words:
-     #                   if newword!="" and newword[0:1]!="/" and ">" in newword:
-      #                  #set finalword to the substring of word starting at the index of >
-       #                     finalword=word[word.index(">")+1:]
-        #                    record=StringTranslationRecord(type1,type2,finalword,len(finalword),"",0,[],0)
-         #                   self.StringTranslationMap.put(record)
-####
+if __name__=="__main__":
+    Extractor("C:/Users/nunzi/Desktop/EsmTranslator/data/SS2_XPAC_Chapter2.esm",StringTranslationMap())

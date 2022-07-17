@@ -1,4 +1,4 @@
-from logic.StringTranslationRecord import StringTranslationRecord
+from StringTranslationRecord import StringTranslationRecord
 
 class StringTranslationMap:
 

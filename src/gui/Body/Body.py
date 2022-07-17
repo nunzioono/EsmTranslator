@@ -84,7 +84,6 @@ class Body(QFrame):
                 self.forwardbutton.clicked.connect(self.next)
                 self.filedownloader=LoadingBar(self,self.forwardbutton,1,True,"Sto scrivendo la traduzione...","Traduzione completata.",writer)
                 self.layout.addWidget(self.filedownloader,Qt.AlignCenter,Qt.AlignCenter)
-            # If an exact match is not confirmed, this last case will be used if provided
             case _:
                 print("Page navigation error")
 
