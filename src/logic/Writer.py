@@ -22,6 +22,6 @@ class Writer:
 
     def write(self,text):
         path=self.path.replace(".esm","_translated.esm")
-        f=open(path,"w")
+        f=open(path,"w",encoding="Latin-1")
         f.write(text)
         f.close()

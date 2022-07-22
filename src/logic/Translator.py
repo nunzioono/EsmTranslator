@@ -34,5 +34,4 @@ class Translator:
         translation=""
         if "translations" in jsonresponse:
             translation=jsonresponse['translations'][0]['text']
-        print(jsonresponse)
         return translation

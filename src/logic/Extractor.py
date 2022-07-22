@@ -1,8 +1,8 @@
 from bethesda_structs.plugin import FNVPlugin 
 import re
 from bs4 import BeautifulSoup
-from StringTranslationRecord import StringTranslationRecord
-from StringTranslationMap import StringTranslationMap
+from logic.StringTranslationRecord import StringTranslationRecord
+from logic.StringTranslationMap import StringTranslationMap
 import math
 
 class Extractor:
@@ -51,7 +51,7 @@ class Extractor:
         with open(self.plugin_path, "rb") as file:
 
             text=file.read().decode("Latin-1")
-            f=open("text.txt","w")
+            f=open("text.txt","w", encoding="Latin-1")
             f.write(text)
             f.close()
             #check for each word if it is in the text

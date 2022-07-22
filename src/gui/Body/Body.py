@@ -64,7 +64,7 @@ class Body(QFrame):
                 self.input_path=self.fileuploader.getInputPath()
                 print(self.input_path)
                 extractor=Extractor(self.input_path,self.map)
-                self.loadingbar=LoadingBar(self,self.forwardbutton,1,extractor,True,"Sto estraendo le stringhe dal file...","Estrazione completata.")
+                self.loadingbar=LoadingBar(self,self.forwardbutton,1,True,"Sto estraendo le stringhe dal file...","Estrazione completata.")
                 self.layout.addWidget(self.loadingbar,Qt.AlignCenter,Qt.AlignCenter)
             case 4:
                 self.selectors=Selectors(self,self.forwardbutton)
